@@ -162,3 +162,14 @@ Deno.test("Inline", async () => {
   const result = await env.runString(code, {a: 'A'});
   assertEquals(result.content, "A B C");
 });
+
+Deno.test("Another inline", async () => {
+  const code = `{{ set someTag = "A" }}
+{{ someTag }} {{ if true }}B{{ /if }}`;
+
+  const env = tmpl();
+  env.use(trimSelf());
+
+  const result = await env.runString(code, {someTag: 'A'});
+  assertEquals(result.content, "A B");
+});

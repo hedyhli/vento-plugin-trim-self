@@ -57,6 +57,8 @@ export function trimSelf(tokens: Token[]) {
         tokens[i+1][1] = next[1].replace(/^(?:\r\n|^\n)/, "");
         wasTrimmed = true;
       }
+    } else if (type == "tag") {
+      wasTrimmed = false;
     }
   }
 }
