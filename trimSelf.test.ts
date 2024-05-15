@@ -153,7 +153,7 @@ Deno.test("With many indents", async () => {
 `);
 });
 
-Deno.test("Inline", async () => {
+Deno.test("Sandwiched", async () => {
   const code = `{{ a }} {{ if true }}B{{ /if }} C`;
 
   const env = tmpl();
@@ -163,13 +163,35 @@ Deno.test("Inline", async () => {
   assertEquals(result.content, "A B C");
 });
 
-Deno.test("Another inline", async () => {
+Deno.test("Sandwiched with previous trim", async () => {
   const code = `{{ set someTag = "A" }}
 {{ someTag }} {{ if true }}B{{ /if }}`;
 
   const env = tmpl();
   env.use(trimSelf());
 
-  const result = await env.runString(code, {someTag: 'A'});
+  const result = await env.runString(code);
+  assertEquals(result.content, "A B");
+});
+
+Deno.test("Previous trim but sandwiched not both by tags", async () => {
+  const code = `{{ set someTag = "C" }}
+A {{ if true }}B{{ /if }}`;
+
+  const env = tmpl();
+  env.use(trimSelf());
+
+  const result = await env.runString(code);
+  assertEquals(result.content, "A B");
+});
+
+Deno.test("Previous trim but sandwiched one by echo", async () => {
+  const code = `{{ set someTag = "C" }}
+{{ echo "A" }} {{ if true }}B{{ /if }}`;
+
+  const env = tmpl();
+  env.use(trimSelf());
+
+  const result = await env.runString(code);
   assertEquals(result.content, "A B");
 });
