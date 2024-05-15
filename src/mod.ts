@@ -26,6 +26,8 @@ const transformTags = [
 ];
 
 export function trimSelf(tokens: Token[]) {
+  let wasTrimmed = false;
+
   for (let i = 0; i < tokens.length; i++) {
     const
       prev = tokens[i-1],
@@ -44,14 +46,16 @@ export function trimSelf(tokens: Token[]) {
       }
 
       // Special case: this might happen due to previous trimming by this plugin
-      if (prev) {
+      if (prev && wasTrimmed) {
         prev[1] = prev[1].replace(/^[ \t]+$/, "");
       }
 
+      wasTrimmed = false;
       // Remove trailing newline. Does *not* remove trailing whitespace. That's
       // the job of the programmer's editor/tooling.
-      if (next) {
+      if (next && (next[1].startsWith("\r") || next[1].startsWith("\n"))) {
         tokens[i+1][1] = next[1].replace(/^(?:\r\n|^\n)/, "");
+        wasTrimmed = true;
       }
     }
   }

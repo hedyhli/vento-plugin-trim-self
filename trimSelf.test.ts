@@ -152,3 +152,13 @@ Deno.test("With many indents", async () => {
 </p>
 `);
 });
+
+Deno.test("Inline", async () => {
+  const code = `{{ a }} {{ if true }}B{{ /if }} C`;
+
+  const env = tmpl();
+  env.use(trimSelf());
+
+  const result = await env.runString(code, {a: 'A'});
+  assertEquals(result.content, "A B C");
+});
