@@ -16,6 +16,19 @@ Only these kind of whitespace are removed:
 
 **No other kind of whitespace around such tags are removed**, unlike autoTrim.
 
+**Table of contents**
+
+<!-- mtoc-start -->
+
+* [Example](#example)
+* [Why `trimSelf` when we already have `autoTrim`, or the built in `{{- -}}`?](#why-trimself-when-we-already-have-autotrim-or-the-built-in----)
+* [Setup](#setup)
+  * [Vento example](#vento-example)
+  * [Lume example](#lume-example)
+* [Usage](#usage)
+
+<!-- mtoc-end -->
+
 ## Example
 
 Template:
@@ -138,3 +151,32 @@ Furthermore, `autoTrim` will remove trailing spaces followed by a newline, while
 this may desirable **in general**, `trimSelf` does not do this because this
 functionality should be delegated to editors and tooling.
 
+## Setup
+
+### Vento example
+
+```ts
+import trimSelf from "https://deno.land/x/vento_plugin_trim_self/mod.ts"
+
+env.use(trimSelf());
+```
+
+### Lume example
+
+```ts
+import lume from "lume/mod.ts";
+import vento from "lume/plugins/vento.ts";
+import trimSelf from "https://deno.land/x/vento_plugin_trim_self/mod.ts";
+
+const site = lume();
+site.use(vento({
+  plugins: [trimSelf()],
+  options: {},
+}))
+
+export default site;
+```
+
+## Usage
+
+Trim-self does its job automatically.
