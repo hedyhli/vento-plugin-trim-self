@@ -46,6 +46,60 @@ After trim-self:
 </p>
 ```
 
+Here's the step-by-step transformation for the `{{ set ... }}` tag:
+
+<ol>
+<li>
+
+```
+<p>
+  Text before.
+  {{ set name = "world" }}
+  Hello, {{ name }}!
+</p>
+```
+
+</li>
+<li>
+
+```
+<p>
+  Text before.
+  {{ set name = "world" }}  Hello, {{ name }}!
+</p>
+```
+
+</li>
+<li>
+
+```
+<p>
+  Text before.
+{{ set name = "world" }}  Hello, {{ name }}!
+</p>
+```
+
+</li>
+<li>
+
+After vento's processing:
+```
+<p>
+  Text before.
+  Hello, {{ name }}!
+</p>
+```
+
+```
+<p>
+  Text before.
+  Hello, world!
+</p>
+```
+
+</li>
+</ol>
+
 Check out the [tests](./trimSelf.test.ts) for self-documenting examples.
 
 
