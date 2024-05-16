@@ -84,7 +84,7 @@ Deno.test("Trailing without echo", async () => {
   assertEquals(result.content, "a    \n");
 });
 
-Deno.test("Smart trim leading", async () => {
+Deno.test("Smart trim leading + smart trailing", async () => {
   const code = `
   {{ if true }}a{{ /if }}
 `;
@@ -93,7 +93,7 @@ Deno.test("Smart trim leading", async () => {
   env.use(trimSelf());
 
   const result = await env.runString(code);
-  assertEquals(result.content, "\n  a");
+  assertEquals(result.content, "\n  a\n");
 });
 
 Deno.test("autoTrim example + Smart trim leading", async () => {
@@ -195,3 +195,29 @@ Deno.test("Previous trim but sandwiched one by echo", async () => {
   const result = await env.runString(code);
   assertEquals(result.content, "A B");
 });
+
+Deno.test("Gemini link list", async () => {
+  const code = `All pages:
+{{ for page of pages }}
+{{ set url = page.url }}
+=> {{url}} {{ page.title }}{{ if url == thisUrl }} (this){{ /if }}
+{{ /for }}
+`;
+
+  const env = tmpl();
+  env.use(trimSelf());
+
+  const result = await env.runString(code, {
+    thisUrl: "first-url",
+    pages: [
+      { url: "first-url", title: "First" },
+      { url: "second-url", title: "Second" },
+    ],
+  });
+  assertEquals(result.content, `All pages:
+=> first-url First (this)
+=> second-url Second
+`);
+});
+
+  // console.table(env.tokenize(code, "test.vto"))

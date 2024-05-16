@@ -35,27 +35,25 @@ export function trimSelf(tokens: Token[]) {
       next = tokens[i+1];
 
     if (type === "tag" && transformTags.find((t) => token.startsWith(t))) {
-      // If it's a tag on a line of its own...
-      if (
-        prev && /\n[ \t]*$/.test(prev[1])     // Indent, and a \n on the left
-          && (next === undefined
-            || /^(?:\r\n|^\n)/.test(next[1])) // Nothing else on the right
-      ) {
-        // ... then remove leading indent
-        prev[1] = prev[1].replace(/\n[ \t]*$/, "\n");
-      }
-
       // Special case: this might happen due to previous trimming by this plugin
       if (prev && wasTrimmed) {
         prev[1] = prev[1].replace(/^[ \t]+$/, "");
       }
-
       wasTrimmed = false;
-      // Remove trailing newline. Does *not* remove trailing whitespace. That's
-      // the job of the programmer's editor/tooling.
-      if (next && (next[1].startsWith("\r") || next[1].startsWith("\n"))) {
-        tokens[i+1][1] = next[1].replace(/^(?:\r\n|^\n)/, "");
-        wasTrimmed = true;
+
+      // If it's a tag on a line of its own...
+      if ((prev[1] === "" || /\n[ \t]*$/.test(prev[1]))   // [Indent], and a \n on the left
+          && (next === undefined              // And newline on the right
+            || next[1].startsWith("\r") || next[1].startsWith("\n"))
+      ) {
+        // ... then remove leading indent
+        prev[1] = prev[1].replace(/\n[ \t]*$/, "\n");
+
+        // and remove trailing newline. Does *not* remove trailing whitespace.
+        if (next && (next[1].startsWith("\r") || next[1].startsWith("\n"))) {
+          tokens[i+1][1] = next[1].replace(/^(?:\r\n|^\n)/, "");
+          wasTrimmed = true;
+        }
       }
     } else if (type == "tag") {
       wasTrimmed = false;
