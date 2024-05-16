@@ -30,6 +30,7 @@ Then, only these kind of whitespace are removed:
   * [Vento example](#vento-example)
   * [Lume example](#lume-example)
 * [Usage](#usage)
+* [TODO](#todo)
 
 <!-- mtoc-end -->
 
@@ -182,3 +183,8 @@ export default site;
 ## Usage
 
 Trim-self does its job automatically.
+
+## TODO
+
+Support filters, by binding them to the left most (but closest) tag. Or at least
+add docs on how to workaround this.
