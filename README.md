@@ -8,11 +8,15 @@ trim aggressively. In effect, it makes tags such as `[/]function`, `[/]if`, and
 other tags that do not get replaced with content (such as `echo`), appear as
 though they were not there.
 
-Only these kind of whitespace are removed:
-- Spaces and tabs, preceded by a single newline -- in other words, indents. This
-  is replaced by a single newline -- in other words, indents removed.
+For such tags that are on a **line of its own**, ie:
+- Has optional leading indents preceded directly by a newline, AND
+- Either EOF or a newline after it.
+
+Then, only these kind of whitespace are removed:
+- Spaces and tabs, preceded by a single newline on its left -- ie, indent --
+  replaced by a newline, in other words, dedented.
 - One trailing newline on this kind of tags, this single `\n` OR `\r\n` is
-  removed.
+  removed;
 
 **No other kind of whitespace around such tags are removed**, unlike autoTrim.
 
@@ -125,17 +129,15 @@ whitespace too aggressively.
 For instance, consider this template:
 
 ```
-Inline {{ if true }}test{{ /if }}
-
-- {{ if true }}List item{{ else }}Other list item{{ /if }}
+Inline{{ if true }} test{{ /if }}
+- {{ if true }}List item.{{ else }}Other list item.{{ /if }}
+Some text after.
 ```
 
 With autoTrim, it would be transformed into:
 
 ```
-Inlinetest
-
--List item
+Inline test-List item.Some text after.
 ```
 
 Trim-self does what you expect out of a plugin that will simply "make template
@@ -143,8 +145,8 @@ tags produce code such that it was as though they weren't there."
 
 ```
 Inline test
-
-- List item
+- List item.
+Some text after.
 ```
 
 Furthermore, `autoTrim` will remove trailing spaces followed by a newline, while
