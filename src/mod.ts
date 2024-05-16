@@ -35,6 +35,8 @@ export function trimSelf(tokens: Token[]) {
       next = tokens[i+1];
 
     if (type === "tag" && transformTags.find((t) => token.startsWith(t))) {
+      // TODO: Support filters
+
       // Special case: this might happen due to previous trimming by this plugin
       if (prev && wasTrimmed) {
         prev[1] = prev[1].replace(/^[ \t]+$/, "");
