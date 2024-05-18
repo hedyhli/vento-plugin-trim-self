@@ -1,6 +1,10 @@
 {
   "tasks": {
-    "test": "deno test --allow-read"
+    "test": "rm -rf cov_profile; deno test --allow-read --coverage=cov_profile && deno coverage cov_profile --detailed"
+  },
+  "imports": {
+    "vento/": "https://deno.land/x/vento@v0.12.5/",
+    "std/": "https://deno.land/std@0.205.0/"
   },
   "lock": false
 }

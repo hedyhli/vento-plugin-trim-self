@@ -1,6 +1,7 @@
 # Trim Self
 
 [![Deno tests](https://github.com/hedyhli/vento-plugin-trim-self/actions/workflows/deno.yml/badge.svg)](https://github.com/hedyhli/vento-plugin-trim-self/actions/workflows/deno.yml)
+![deno-coverage](https://img.shields.io/badge/Coverage-100%25-2ebb4e)
 
 Remove trailing newline and leading indent on **tags that do not replace
 itself with content**, only.

@@ -1,5 +1,5 @@
-import type { Token } from "https://deno.land/x/vento@v0.12.5/src/tokenizer.ts";
-import type { Environment } from "https://deno.land/x/vento@v0.12.5/src/environment.ts";
+import type { Token } from "vento/src/tokenizer.ts";
+import type { Environment } from "vento/src/environment.ts";
 
 export default function () {
   return (env: Environment) => {

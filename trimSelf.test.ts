@@ -1,6 +1,6 @@
-import tmpl from "https://deno.land/x/vento@v0.12.5/mod.ts";
+import tmpl from "vento/mod.ts";
 import trimSelf from "./src/mod.ts";
-import { assertEquals } from "https://deno.land/std@0.205.0/assert/assert_equals.ts";
+import { assertEquals } from "std/assert/assert_equals.ts";
 
 Deno.test("Indent", async () => {
   const code = `
