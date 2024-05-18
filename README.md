@@ -3,13 +3,18 @@
 [![Deno tests](https://github.com/hedyhli/vento-plugin-trim-self/actions/workflows/deno.yml/badge.svg)](https://github.com/hedyhli/vento-plugin-trim-self/actions/workflows/deno.yml)
 ![deno-coverage](https://img.shields.io/badge/Coverage-100%25-2ebb4e)
 
-Remove trailing newline and leading indent on **tags that do not replace
-itself with content**, only.
+Remove trailing newline and leading indent on tags that do not replace
+itself with content, **only if the tag appears on its own line***.
 
 Similar to [autoTrim](https://vento.js.org/plugins/auto-trim/), but does not
 trim aggressively. In effect, it makes tags such as `[/]function`, `[/]if`, and
 other tags that do not get replaced with content (such as `echo`), appear as
 though they were not there.
+
+This plugin exists to enable auto-trimming work as expected when vento is used
+for file formats where whitespace is significant, such as markdown, unlike HTML.
+
+## How it works
 
 For such tags that are on a **line of its own**, ie:
 - Has optional leading indents preceded directly by a newline, AND
@@ -23,12 +28,12 @@ Then, only these kind of whitespace are removed:
 
 **No other kind of whitespace around such tags are removed**, unlike autoTrim.
 
-**Table of contents**
+Table of contents:
 
 <!-- mtoc-start -->
 
 * [Example](#example)
-* [Why `trimSelf` when we already have `autoTrim`, or the built in `{{- -}}`?](#why-trimself-when-we-already-have-autotrim-or-the-built-in----)
+* [Why trim-self when we already have auto-trim?](#why-trim-self-when-we-already-have-auto-trim)
 * [Setup](#setup)
   * [Vento example](#vento-example)
   * [Lume example](#lume-example)
@@ -124,10 +129,10 @@ After vento's processing:
 Check out the [tests](./trimSelf.test.ts) for self-documenting examples.
 
 
-## Why `trimSelf` when we already have `autoTrim`, or the built in `{{- -}}`?
+## Why trim-self when we already have auto-trim?
 
 Auto-trim does a great job at doing what it's supposed to do, but both auto-trim
-and the built in trimming functionality (similar to Go templates), removes
+and the built in trimming functionality (similar to Go templates), remove
 whitespace too aggressively.
 
 For instance, consider this template:
@@ -169,7 +174,8 @@ env.use(trimSelf());
 
 ### Lume example
 
-```ts
+```js
+// _config.ts / _config.js
 import lume from "lume/mod.ts";
 import vento from "lume/plugins/vento.ts";
 import trimSelf from "https://deno.land/x/vento_plugin_trim_self/mod.ts";
@@ -189,5 +195,13 @@ Trim-self does its job automatically.
 
 ## TODO
 
+Filters are not yet supported:
+```vento
+{{ for item in list |> myFilter }}
+<!-- the newline after the above tag will not be trimmed -->
+{{ /for }}
+```
+
 Support filters, by binding them to the left most (but closest) tag. Or at least
-add docs on how to workaround this.
+add docs on how to workaround this, i.e., in Lume, use `site.data("myFilter", fn)`
+rather than `site.filter("myFilter", fn)` and use it as `myFilter(list)` instead.
