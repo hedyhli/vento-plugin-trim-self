@@ -4,7 +4,7 @@
 ![deno-coverage](https://img.shields.io/badge/Coverage-100%25-2ebb4e)
 
 Remove trailing newline and leading indent on tags that do not replace
-itself with content, **only if the tag appears on its own line***.
+itself with content, **only if the tag appears on its own line**.
 
 Similar to [autoTrim](https://vento.js.org/plugins/auto-trim/), but does not
 trim aggressively. In effect, it makes tags such as `[/]function`, `[/]if`, and
